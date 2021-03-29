@@ -45,12 +45,13 @@
     </div>
 
     <div class="col-2">
-      <ul id="online-users"> 
-          <p>Online users</p><br>
-          <%# should change to matching username %>
-        </nav>
-        <%= render partial: "users/online", collection: User.online, as: :user%>
-      </ul>
+      <% if current_user.rooms.include?(@room)%>
+        <ul id="online-users"> 
+            <p>Online users</p><br>
+            <%# should change to matching username %>
+          <%= render partial: "users/online", collection: User.online, as: :user%>
+        </ul>
+      <% end %>
     </div>
   </div>
 </div>
