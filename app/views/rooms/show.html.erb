@@ -18,41 +18,43 @@
         <%= image_tag 'explore.svg', style: 'height:20%;width:auto;'%>
     </div>
     
-    <div class="col-7 vertical-sidebar">
-      <div class="chat-room">
-        <nav class="navbar sticky-top navbar-light bg-light">
+    
+    <div class="col-9 vertical-sidebar">
+      <nav class="navbar sticky-top navbar-light bg-light">
           <span class ="navbar-brand"><%= @room.name %></span> 
           <%# should change to matching username %>
         </nav>
-        <div id="messages">
-          <% if current_user.rooms.include?(@room)%>
-            <div data-target="room.messages">
-              <%= render @room.messages %>
-            </div>
-            <div class="respond-box">
-              <%= form_for [@room, Message.new], data: { action: "ajax:success->room#clearMessage" }, remote: true do |form| %>
-               <%= form.text_field :body, id: "emojionearea", placeholder: "Message ##{@room.name}", class: "form-control", data: { target: "room.newMessage" }%>
+        <div class="row">
+          <div class="col-9 chat-room vertical-sidebar">
+            <div id="messages">
+              <% if current_user.rooms.include?(@room)%>
+                <div data-target="room.messages">
+                  <%= render @room.messages %>
+                </div>
+                <div class="respond-box">
+                  <%= form_for [@room, Message.new], data: { action: "ajax:success->room#clearMessage" }, remote: true do |form| %>
+                  <%= form.text_field :body, id: "emojionearea", placeholder: "Message ##{@room.name}", class: "form-control", data: { target: "room.newMessage" }%>
+                  <% end %>
+                </div>
+              <% else %>
+                <br>
+                <%= link_to "Join #{@room.name}", room_room_user_path(@room), method: :post, class: "room-link" %>
+                <br>
+                <%= image_tag 'friend.svg', style: 'height:20%;width:auto;'%>
               <% end %>
-            </div>
-          <% else %>
-            <br>
-            <%= link_to "Join #{@room.name}", room_room_user_path(@room), method: :post, class: "room-link" %>
-            <br>
-            <%= image_tag 'friend.svg', style: 'height:20%;width:auto;'%>
-          <% end %>
+              </div>
           </div>
-      </div>
-    </div>
-
-    <div class="col-2">
-      <% if current_user.rooms.include?(@room)%>
-        <ul id="online-users"> 
-            <p>Online users</p><br>
-            <%# should change to matching username %>
-          <%= render partial: "users/online", collection: User.online, as: :user%>
-        </ul>
-      <% end %>
-    </div>
+    
+          <div class="col-2">
+            <% if current_user.rooms.include?(@room)%>
+              <ul id="online-users"> 
+                  <p>Online users</p><br>
+                  <%# should change to matching username %>
+                <%= render partial: "users/online", collection: User.online, as: :user%>
+              </ul>
+            <% end %>
+          </div>
+        </div>
   </div>
 </div>
 
